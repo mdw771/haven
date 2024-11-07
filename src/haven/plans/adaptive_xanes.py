@@ -255,6 +255,33 @@ class XANESSamplingRecommender:
             raise NoRecommendation
         
         return candidates
+    
+    
+class XANESGivenGridRecommender(XANESSamplingRecommender):
+    def __init__(self, supplied_grid: ndarray,*args, **kwargs):
+        """
+        Recommender that suggests points on a given list of points.
+
+        Parameters
+        ----------
+        supplied_grid : ndarray
+            A (N,) array of points to be suggested.
+        """
+        self.supplied_grid = supplied_grid
+        self.i = 0
+    
+    def tell(self, *args, **kwargs) -> None:
+        pass
+    
+    def tell_many(self, *args, **kwargs) -> None:
+        pass    
+        
+    def ask(self, n=1, *args, **kwargs) -> list[float]:
+        if self.i >= len(self.supplied_grid):
+            raise NoRecommendation
+        result = [self.supplied_grid[self.i]]
+        self.i += 1
+        return result
 
 
 def dummy_measure(*args, **kwargs):
